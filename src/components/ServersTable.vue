@@ -17,11 +17,7 @@
     </thead>
     <tbody id="servers">
     <!-- Servers here \o/ -->
-    <!--
-    use index for the key may cause performance issues when delete a server from array,
-    but not a big matter and we cannot find a more suitable data for the unique key.
-    -->
-    <table-item v-for="(server, index) of servers" :key="index" :server="server"/>
+    <table-item v-for="server of servers" :key="server.id" :server="server"/>
     </tbody>
   </table>
 </template>

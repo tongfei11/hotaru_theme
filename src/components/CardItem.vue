@@ -13,8 +13,10 @@
         </div>
       </div>
       <div class="card-content">
-        <p>Network: {{ `${tableRowByteConvert(server.network_rx)} | ${tableRowByteConvert(server.network_tx)}` }}</p>
-        <p>负载状态: {{ typeof server.load !== 'undefined' ? server.load : 'Offline' }}</p>
+        <p>Network: {{
+            `${tableRowByteConvert(server.status.network_rx)} | ${tableRowByteConvert(server.status.network_tx)}`
+          }}</p>
+        <p>负载状态: {{ typeof server.status.load !== 'undefined' ? server.status.load : 'Offline' }}</p>
       </div>
     </div>
   </div>
@@ -29,7 +31,7 @@ export default defineComponent({
   props: {
     server: {
       type: Object as PropType<StatusItem | BoxItem>,
-      default: () => ({})
+      default: () => ({ status: {} })
     }
   },
   setup(props) {

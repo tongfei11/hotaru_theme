@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, onBeforeUnmount } from 'vue';
-import axios from 'axios';
+import { defineComponent, ref, onBeforeUnmount } from 'vue';
 
 import TheHeader from '@/components/TheHeader.vue';
 import TheError from '@/components/TheError.vue';
@@ -33,16 +32,16 @@ export default defineComponent({
   setup() {
     const servers = ref<Array<StatusItem | BoxItem>>();
     const updated = ref<number>();
-    const { interval } = window.__PRE_CONFIG__;
-    let timer: number;
-    const runFetch = () => axios.get('json/stats.json')
-      .then(res => {
-        servers.value = res.data.servers;
-        updated.value = Number(res.data.updated);
-      })
-      .catch(err => console.log(err));
-    onMounted(() => runFetch() && (timer = setInterval(runFetch, interval * 1000)));
-    onBeforeUnmount(() => clearInterval(timer));
+    const ws = new WebSocket(`${document.location.protocol.replace('http', 'ws')}${window.location.host}/public`);
+    ws.onopen = () => console.log('Connect to backend successfully!');
+    ws.onclose = evt => console.log(`WebSocket disconnected: ${evt.reason}`);
+    ws.onerror = evt => console.log(`An error occurred while connecting to the backend, ${evt}`);
+    ws.onmessage = evt => {
+      const data = JSON.parse(evt.data);
+      servers.value = data.servers;
+      updated.value = data.updated;
+    };
+    onBeforeUnmount(() => ws.close());
     return {
       servers,
       updated
