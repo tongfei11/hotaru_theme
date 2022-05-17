@@ -48,3 +48,13 @@ npm run build
 npm run lint
 ```
 
+更新前端
+默认服务端更新不会更新前端。因为更新前端会导致自己自定义的前端消失。
+
+rm -rf /usr/local/ServerStatus/web/*
+wget https://github.com/cokemine/hotaru_theme/releases/latest/download/hotaru-theme.zip
+unzip hotaru-theme.zip
+mv ./hotaru-theme/* /usr/local/ServerStatus/web/
+service status-server restart
+# systemctl restart status-server
+
